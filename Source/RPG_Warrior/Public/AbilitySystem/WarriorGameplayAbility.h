@@ -13,6 +13,8 @@ enum class EWarriorAbilityActivationPolicy : uint8
 	OnGiven
 };
 
+class UPawnCombatComponent;
+
 /**
  * 
  */
@@ -27,6 +29,9 @@ protected:
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 	//~ End UGameplayAbility Interface.
 
-	UPROPERTY(EditDefaultsOnly, Category = "WarriorAbility")
+	UPROPERTY(EditDefaultsOnly, Category = "Warrior/Ability")
 	EWarriorAbilityActivationPolicy AbilityActivationPolicy = EWarriorAbilityActivationPolicy::OnTriggered;
+
+	UFUNCTION(BlueprintPure, Category = "Warrior/Ability")
+	UPawnCombatComponent* GetPawnCombatComponentFromActorInfo() const;
 };
