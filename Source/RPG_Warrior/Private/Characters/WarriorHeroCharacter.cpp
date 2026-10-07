@@ -10,6 +10,8 @@
 #include "DataAssets/Input/DA_InputConfig.h"
 #include "Components/Input/WarriorInputComponent.h"
 #include "WarriorGameplayTags.h"
+#include "AbilitySystem/WarriorAbilitySystemComponent.h"
+#include "DataAssets/StartUpData/DataAsset_StartUpBase.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -37,6 +39,19 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 }
 
+void AWarriorHeroCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	if (!CharacterStartUpData.IsNull())
+	{
+		if (UDataAsset_StartUpBase* LoadedData = CharacterStartUpData.LoadSynchronous())
+		{
+			LoadedData->GiveToAbilitySystemComponent(WarriorAbilitySystemComponent);
+		}
+	}
+}
+
 void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	checkf(InputConfigDA, TEXT("Forgot to assign a valid data asset as input config"));
@@ -54,8 +69,6 @@ void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 void AWarriorHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Debug::Print(TEXT("Working"));
 }
 
 void AWarriorHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)

@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "AnimInstances/WarriorCharacterAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Characters/WarriorBaseCharacter.h"
-#include "AnimInstances/WarriorCharacterAnimInstance.h"
 
 void UWarriorCharacterAnimInstance::NativeInitializeAnimation()
 {
