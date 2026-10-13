@@ -2,3 +2,9 @@
 
 
 #include "WarriorTypes/WarriorStructTypes.h"
+#include "AbilitySystem/Abilities/WarriorGameplayAbility.h"
+
+bool FHeroAbilitySet::IsValid() const
+{
+	return InputTag.IsValid() && AbilityToGrant != nullptr;
+}
