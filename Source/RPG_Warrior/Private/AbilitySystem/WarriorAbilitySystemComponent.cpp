@@ -9,7 +9,7 @@ void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& I
 
 	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
 	{
-		if (!AbilitySpec.DynamicAbilityTags.HasTagExact(InInputTag)) continue;
+		if (!AbilitySpec.GetDynamicSpecSourceTags().HasTagExact(InInputTag)) continue;
 
 		TryActivateAbility(AbilitySpec.Handle);
 	}

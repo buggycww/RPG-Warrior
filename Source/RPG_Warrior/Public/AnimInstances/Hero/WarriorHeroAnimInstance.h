@@ -7,6 +7,7 @@
 #include "WarriorHeroAnimInstance.generated.h"
 
 class AWarriorHeroCharacter;
+class UHeroCombatComponent;
 
 /**
  * 
@@ -29,6 +30,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AnimData/LocomotionData")
 	float EnterRelaxedStateThreshold = 5.f;
+
+	UPROPERTY(BlueprintReadOnly, Category = "AnimData/References")
+	UHeroCombatComponent* HeroCombatComponent;
 
 	float IdleElapsedTime;
 };

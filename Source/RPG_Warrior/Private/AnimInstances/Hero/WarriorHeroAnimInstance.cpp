@@ -3,6 +3,7 @@
 
 #include "AnimInstances/Hero/WarriorHeroAnimInstance.h"
 #include "Characters/WarriorHeroCharacter.h"
+#include "Components/Combat/HeroCombatComponent.h"
 
 void UWarriorHeroAnimInstance::NativeInitializeAnimation()
 {
@@ -10,7 +11,9 @@ void UWarriorHeroAnimInstance::NativeInitializeAnimation()
 
 	if (OwningCharacter)
 	{
-		OwningCharacter = Cast<AWarriorHeroCharacter>(OwningCharacter);
+		OwningHeroCharacter = Cast<AWarriorHeroCharacter>(OwningCharacter);
+
+		HeroCombatComponent = OwningHeroCharacter->GetHeroCombatComponent();
 	}
 }
 
