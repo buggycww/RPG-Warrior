@@ -18,7 +18,8 @@ void UDataAsset_StartUpBase::GiveToAbilitySystemComponent(UWarriorAbilitySystemC
 		{
 			if (!EffectClass) continue;
 
-			UGameplayEffect* EffectCDO = EffectClass->GetDefaultObject<UGameplayEffect>();
+			UGameplayEffect* EffectCDO = EffectClass->GetDefaultObject<UGameplayEffect>(); //CDO = class default object, the default instance of a class in Unreal Engine. 
+																							//It is used to access default properties and methods of a class without creating an instance of that class.
 			InASCToGive->ApplyGameplayEffectToSelf(
 				EffectCDO,
 				ApplyLevel,

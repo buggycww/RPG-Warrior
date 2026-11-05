@@ -4,6 +4,8 @@
 #include "Items/Weapons/WarriorWeaponBase.h"
 #include "Components/BoxComponent.h"
 
+#include "WarriorDebugHelper.h"
+
 // Sets default values
 AWarriorWeaponBase::AWarriorWeaponBase()
 {
@@ -17,5 +19,40 @@ AWarriorWeaponBase::AWarriorWeaponBase()
 	WeaponCollisionBox->SetupAttachment(GetRootComponent());
 	WeaponCollisionBox->SetBoxExtent(FVector(20.f));
 	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	
+	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnWeaponCollisionBoxBeginOverlap);
+	WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ThisClass::OnWeaponCollisionBoxEndOverlap);
+}
+
+void AWarriorWeaponBase::OnWeaponCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	APawn* WeaponOwnerPawn = GetInstigator<APawn>();
+
+	checkf(WeaponOwnerPawn, TEXT("Weapon %s has no instigator pawn."), *GetName());
+
+	if (APawn* HitPawn = Cast<APawn>(OtherActor))
+	{
+		if (HitPawn != WeaponOwnerPawn)
+		{
+			OnWeaponBeginHitTarget.ExecuteIfBound(OtherActor);
+		}
+
+		//TODO: handle hit check for enemy characters
+	}
+}
+
+void AWarriorWeaponBase::OnWeaponCollisionBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	APawn* WeaponOwnerPawn = GetInstigator<APawn>();
+
+	checkf(WeaponOwnerPawn, TEXT("Weapon %s has no instigator pawn."), *GetName());
+
+	if (APawn* HitPawn = Cast<APawn>(OtherActor))
+	{
+		if (HitPawn != WeaponOwnerPawn)
+		{
+			OnWeaponEndHitTarget.ExecuteIfBound(OtherActor);
+		}
+
+		//TODO: handle hit check for enemy characters
+	}
 }

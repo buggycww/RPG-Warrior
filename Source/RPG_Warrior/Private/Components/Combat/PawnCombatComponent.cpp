@@ -3,6 +3,7 @@
 
 #include "Components/Combat/PawnCombatComponent.h"
 #include "Items/Weapons/WarriorWeaponBase.h"
+#include "Components/BoxComponent.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -12,6 +13,9 @@ void UPawnCombatComponent::RegisterSpawnedWeapon(const FGameplayTag& InWeaponTag
 	check(InWeaponToRegister);
 
 	CharacterCarriedWeaponMap.Emplace(InWeaponTagToRegister, InWeaponToRegister);
+
+	InWeaponToRegister->OnWeaponBeginHitTarget.BindUObject(this, &ThisClass::OnBeginHitTarget);
+	InWeaponToRegister->OnWeaponEndHitTarget.BindUObject(this, &ThisClass::OnEndHitTarget);
 
 	if (bRegisterAsEquippedWeapon)
 	{
@@ -37,4 +41,38 @@ AWarriorWeaponBase* UPawnCombatComponent::GetCharacterCurrentEquippedWeapon() co
 	}
 
 	return *CharacterCarriedWeaponMap.Find(CurrentEquippedWeaponTag);
+}
+
+void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
+{
+	switch (ToggleDamageType)
+	{
+		case EToggleDamageType::CurrentEquippedWeapon:
+		{
+			AWarriorWeaponBase* WeaponToTogle = GetCharacterCurrentEquippedWeapon();
+			check(WeaponToTogle);
+
+			if (bShouldEnable)
+			{
+				WeaponToTogle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+			}
+			else
+			{
+				WeaponToTogle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+				OverlappedActors.Empty();
+			}
+
+			break;
+		}
+	}
+
+	// TODO: Implement LeftHand and RightHand toggle damage type.
+}
+
+void UPawnCombatComponent::OnBeginHitTarget(AActor* InTargetActor)
+{
+}
+
+void UPawnCombatComponent::OnEndHitTarget(AActor* InTargetActor)
+{
 }
