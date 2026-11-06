@@ -2,6 +2,9 @@
 
 
 #include "AbilitySystem/WarriorAttributeSet.h"
+#include "GameplayEffectExtension.h"
+
+#include "WarriorDebugHelper.h"
 
 UWarriorAttributeSet::UWarriorAttributeSet()
 {
@@ -11,4 +14,46 @@ UWarriorAttributeSet::UWarriorAttributeSet()
 	InitMaxRage(1.f);
 	InitAttackPower(1.f);
 	InitDefensePower(1.f);
+}
+
+void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+{
+	if (Data.EvaluatedData.Attribute == GetCurrentHealthAttribute())
+	{
+		const float newHealthValue = FMath::Clamp(GetCurrentHealth(), 0.f, GetMaxHealth());
+		SetCurrentHealth(newHealthValue);
+	}
+
+	if (Data.EvaluatedData.Attribute == GetCurrentRageAttribute())
+	{
+		const float newRageValue = FMath::Clamp(GetCurrentRage(), 0.f, GetMaxRage());
+		SetCurrentRage(newRageValue);
+	}
+
+	if (Data.EvaluatedData.Attribute == GetDamageTakenAttribute())
+	{
+		const float damageValue = GetDamageTaken();
+		if (damageValue > 0.f)
+		{
+			const float oldHealthValue = GetCurrentHealth();
+			const float newHealthValue = FMath::Clamp(oldHealthValue - damageValue, 0.f, GetMaxHealth());
+			SetCurrentHealth(newHealthValue);
+
+			const FString debugMessage = FString::Printf(
+				TEXT("Old Health: %f, Damage Done: %f, New Health: %f"), oldHealthValue, damageValue, newHealthValue
+			);	
+
+			Debug::Print(debugMessage, FColor::Green);
+
+
+			//TODO: Notify UI
+
+			//TODO: Handle Character Death
+			if (newHealthValue == 0.f)
+			{
+
+			}
+		}
+		SetDamageTaken(0.f);
+	}
 }
