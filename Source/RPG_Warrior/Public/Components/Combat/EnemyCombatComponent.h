@@ -14,4 +14,6 @@ class RPG_WARRIOR_API UEnemyCombatComponent : public UPawnCombatComponent
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void OnBeginHitTarget(AActor* InTargetActor) override;
 };

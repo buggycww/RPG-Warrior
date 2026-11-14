@@ -25,4 +25,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior/Ability")
 	void RemoveGrantedWeaponAbilities(UPARAM(ref) TArray<FGameplayAbilitySpecHandle>& InAbilitySpecHandlesToRemove);
+
+	UFUNCTION(BlueprintCallable, Category = "Warrior/Ability")
+	bool TryActivateAbilityByTag(const FGameplayTag& AbilityTagToActivate);
 };

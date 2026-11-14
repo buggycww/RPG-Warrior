@@ -37,4 +37,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Warrior/FunctionLibrary", meta = (DisplayName = "Get Pawn Combat Component", ExpandEnumAsExecs = "OutValidType"))
 	static UPawnCombatComponent* BP_GetPawnCombatComponentFromActor(AActor* InActor, EWarriorValidType& OutValidType);
+
+	UFUNCTION(BlueprintCallable, Category = "Warrior/FunctionLibrary")
+	static bool IsTargetPawnHostile(APawn* QuerierPawn, APawn* TargetPawn);
 };
